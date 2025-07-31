@@ -1,21 +1,17 @@
-import { PATH_DB } from '../constants/contacts.js';
-import path from 'path';
+import { writeContacts } from '../utils/writeContacts.js';
+import { readContacts } from '../utils/readContacts.js';
 
-import fs from 'node:fs/promises';
-
-import { getAllContacts } from './getAllContacts.js';
-
-const contactsPath = path.join('src', 'db', `${PATH_DB}`);
 export const removeLastContact = async () => {
-  const data = await getAllContacts();
-  const removeLast = data.slice(0, -1);
-
   try {
-    await fs.writeFile(contactsPath, JSON.stringify(removeLast), 'utf8');
-    return removeLast;
+    const data = await readContacts();
+    if (!data.length) return;
+    data.pop();
+
+    await writeContacts(data);
+    console.log(`Видалено останній контакт. Залишилось: ${data.length}`);
   } catch (error) {
-    console.error('Сталася помилка під час генерації контактів:', error);
+    console.error('Сталася помилка під час усунення контакту:', error);
   }
 };
 
-console.log(removeLastContact());
+removeLastContact();

@@ -1,13 +1,11 @@
 import { PATH_DB } from '../constants/contacts.js';
 import fs from 'node:fs/promises';
-import path from 'node:path';
-import { createFakeContact } from '../utils/createFakeContact.js';
 
-const DB_PATH = path.resolve('src', 'db', `${PATH_DB}`);
+import { createFakeContact } from '../utils/createFakeContact.js';
 
 export const generateContacts = async (number) => {
   try {
-    const existingData = await fs.readFile(DB_PATH, 'utf8');
+    const existingData = await fs.readFile(PATH_DB, 'utf8');
     const contacts = JSON.parse(existingData);
 
     const newContacts = Array.from({ length: number }, () =>
@@ -17,8 +15,8 @@ export const generateContacts = async (number) => {
     const updatedContacts = [...contacts, ...newContacts];
 
     await fs.writeFile(
-      DB_PATH,
-      JSON.stringify(updatedContacts, DB_PATH, 2),
+      PATH_DB,
+      JSON.stringify(updatedContacts, PATH_DB, 2),
       'utf8',
     );
 
@@ -28,4 +26,4 @@ export const generateContacts = async (number) => {
   }
 };
 
-console.log(generateContacts(5));
+generateContacts(5);

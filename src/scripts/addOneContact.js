@@ -1,14 +1,11 @@
 import { PATH_DB } from '../constants/contacts.js';
 import fs from 'node:fs/promises';
-import path from 'node:path';
 import { createFakeContact } from '../utils/createFakeContact.js';
-
-const DB_PATH = path.resolve('src', 'db', `${PATH_DB}`);
 
 export const addOneContact = async (number = 1) => {
   try {
     // Зчитування існуючих контактів
-    const existingData = await fs.readFile(DB_PATH, 'utf8');
+    const existingData = await fs.readFile(PATH_DB, 'utf8');
     const contacts = JSON.parse(existingData);
 
     // Створення нових контактів
@@ -21,8 +18,8 @@ export const addOneContact = async (number = 1) => {
 
     // Запис назад у файл
     await fs.writeFile(
-      DB_PATH,
-      JSON.stringify(updatedContacts, DB_PATH, 2),
+      PATH_DB,
+      JSON.stringify(updatedContacts, PATH_DB, 2),
       'utf8',
     );
 
@@ -32,4 +29,4 @@ export const addOneContact = async (number = 1) => {
   }
 };
 
-console.log(addOneContact());
+addOneContact();
